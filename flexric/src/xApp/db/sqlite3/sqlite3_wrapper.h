@@ -34,5 +34,6 @@ void close_db_sqlite3(sqlite3* db);
 
 void write_db_sqlite3(sqlite3* db, global_e2_node_id_t const* id, sm_ag_if_rd_t const* rd);
 
+int to_sql_string_kpm_custom(global_e2_node_id_t const* id, kpm_ind_data_t const* ind, int64_t tstamp, char* out, size_t out_len); // declaration of custom kpm function as non static
 #endif
 

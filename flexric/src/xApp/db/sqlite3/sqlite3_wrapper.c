@@ -311,7 +311,27 @@ void create_kpm_table(sqlite3* db)
   create_table(db, sql_kpm_labelInfo);
 }
 
-static
+// My custom KPM Table
+static void create_kpm_custom_table(sqlite3* db) __attribute__((unused)); //suppress warnings
+static void create_kpm_custom_table(sqlite3* db) {
+    assert(db != NULL);
+
+    char* sql_kpm_custom = "DROP TABLE IF EXISTS KPM_Custom;"
+    "CREATE TABLE KPM_Custom(tstamp INT,"
+    "ngran_node INT CHECK(ngran_node >= 0 AND ngran_node < 9),"
+    "mcc INT,"
+    "mnc INT,"
+    "mnc_digit_len INT,"
+    "nb_id INT,"
+    "cu_du_id TEXT,"
+    "latency REAL,"
+    "throughput REAL,"
+    "load REAL"
+    ");";
+    create_table(db, sql_kpm_custom);
+}
+
+// made insert non static so kpm xapp can directly call it
 void insert_db(sqlite3* db, char const* sql)
 {
   assert(db != NULL);
@@ -899,6 +919,51 @@ int to_sql_string_gtp_NGUT(global_e2_node_id_t const* id,gtp_ngu_t_stats_t* gtp,
   assert(rc < (int)max && "Not enough space in the char array to write all the data");
   return rc;
 }
+
+// custom function definition to insert kpm data to KPM_Custom Table
+
+int to_sql_string_kpm_custom(global_e2_node_id_t const* id, kpm_ind_data_t const* ind, int64_t tstamp, char* out, size_t out_len) {
+    assert(ind != NULL);
+    assert(out != NULL);
+    const size_t max = 512;
+    assert(out_len >= max);
+
+    char* c_null = NULL;
+    char c_cu_du_id[26];
+    if (id->cu_du_id) {
+        int rc = snprintf(c_cu_du_id, 26, "%lu", *id->cu_du_id);
+        assert(rc < (int) max && "Not enough space in the char array to write all the data");
+    }
+
+    int rc = snprintf(out, out_len, 
+        "INSERT INTO KPM_Custom VALUES("
+        "%ld," // tstamp
+        "%d," // ngran_node
+        "%d," // mcc
+        "%d," // mnc
+        "%d," // mnc_digit_len
+        "%d," // nb_id
+        "'%s'," // cu_du_id
+        "%u," // collectStartTime
+        "%u," // throughput
+        "%lu" // load
+        ");"
+        , tstamp
+        , id->type
+        , id->plmn.mcc
+        , id->plmn.mnc
+        , id->plmn.mnc_digit_len
+        , id->nb_id.nb_id 
+        , id->cu_du_id ? c_cu_du_id : c_null
+        , ind->hdr.kpm_ric_ind_hdr_format_1.collectStartTime
+        , ind->msg.frm_3.meas_report_per_ue[0].ue_meas_report_lst.gnb.gnb_cu_ue_f1ap_lst[0] // initial naming error [changed]
+        , ind->msg.frm_3.meas_report_per_ue[0].ue_meas_report_lst.gnb.amf_ue_ngap_id // initial naming error [changed]
+    );
+    assert(rc < (int)max && "Not enough space in the char array to write all the data");
+    return rc;
+}
+
+// end custom function
 
 // static
 // void to_sql_string_kpm_measRecord(global_e2_node_id_t const* id,  
