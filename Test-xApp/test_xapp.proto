@@ -2,6 +2,7 @@ syntax = "proto3";
 
 service TestXAppService {
   rpc CheckServerStatus (StatusRequest) returns (StatusResponse);
+  rpc StreamServerStatus (StatusRequest) returns (stream StatusResponse);
 }
 
 message StatusRequest {
@@ -12,5 +13,4 @@ message StatusResponse {
   bool isRunning = 1;
   string message = 2;
 }
-
 

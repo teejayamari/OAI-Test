@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0ftest_xapp.proto\"\x0f\n\rStatusRequest\"4\n\x0eStatusResponse\x12\x11\n\tisRunning\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2G\n\x0fTestXAppService\x12\x34\n\x11\x43heckServerStatus\x12\x0e.StatusRequest\x1a\x0f.StatusResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0ftest_xapp.proto\"\x0f\n\rStatusRequest\"4\n\x0eStatusResponse\x12\x11\n\tisRunning\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\x80\x01\n\x0fTestXAppService\x12\x34\n\x11\x43heckServerStatus\x12\x0e.StatusRequest\x1a\x0f.StatusResponse\x12\x37\n\x12StreamServerStatus\x12\x0e.StatusRequest\x1a\x0f.StatusResponse0\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -25,6 +25,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_STATUSREQUEST']._serialized_end=34
   _globals['_STATUSRESPONSE']._serialized_start=36
   _globals['_STATUSRESPONSE']._serialized_end=88
-  _globals['_TESTXAPPSERVICE']._serialized_start=90
-  _globals['_TESTXAPPSERVICE']._serialized_end=161
+  _globals['_TESTXAPPSERVICE']._serialized_start=91
+  _globals['_TESTXAPPSERVICE']._serialized_end=219
 # @@protoc_insertion_point(module_scope)

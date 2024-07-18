@@ -44,6 +44,11 @@ class TestXAppServiceStub(object):
                 request_serializer=test__xapp__pb2.StatusRequest.SerializeToString,
                 response_deserializer=test__xapp__pb2.StatusResponse.FromString,
                 _registered_method=True)
+        self.StreamServerStatus = channel.unary_stream(
+                '/TestXAppService/StreamServerStatus',
+                request_serializer=test__xapp__pb2.StatusRequest.SerializeToString,
+                response_deserializer=test__xapp__pb2.StatusResponse.FromString,
+                _registered_method=True)
 
 
 class TestXAppServiceServicer(object):
@@ -55,11 +60,22 @@ class TestXAppServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def StreamServerStatus(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_TestXAppServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'CheckServerStatus': grpc.unary_unary_rpc_method_handler(
                     servicer.CheckServerStatus,
+                    request_deserializer=test__xapp__pb2.StatusRequest.FromString,
+                    response_serializer=test__xapp__pb2.StatusResponse.SerializeToString,
+            ),
+            'StreamServerStatus': grpc.unary_stream_rpc_method_handler(
+                    servicer.StreamServerStatus,
                     request_deserializer=test__xapp__pb2.StatusRequest.FromString,
                     response_serializer=test__xapp__pb2.StatusResponse.SerializeToString,
             ),
@@ -89,6 +105,33 @@ class TestXAppService(object):
             request,
             target,
             '/TestXAppService/CheckServerStatus',
+            test__xapp__pb2.StatusRequest.SerializeToString,
+            test__xapp__pb2.StatusResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def StreamServerStatus(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/TestXAppService/StreamServerStatus',
             test__xapp__pb2.StatusRequest.SerializeToString,
             test__xapp__pb2.StatusResponse.FromString,
             options,
