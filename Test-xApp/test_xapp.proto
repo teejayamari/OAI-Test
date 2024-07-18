@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+service TestXAppService {
+  rpc CheckServerStatus (StatusRequest) returns (StatusResponse);
+}
+
+message StatusRequest {
+  // This message can be empty for now
+}
+
+message StatusResponse {
+  bool isRunning = 1;
+  string message = 2;
+}
+
+
